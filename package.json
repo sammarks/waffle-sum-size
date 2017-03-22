@@ -1,0 +1,33 @@
+{
+  "name": "waffle-sum-size",
+  "version": "0.0.1",
+  "description": "CLI to sum the size of Waffle.io issues based on a few filters.",
+  "main": "index.js",
+  "bin": {
+    "waffle-sum-size": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sammarks/waffle-sum-size.git"
+  },
+  "author": "Samuel Marks <sam@sammarks.me>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sammarks/waffle-sum-size/issues"
+  },
+  "homepage": "https://github.com/sammarks/waffle-sum-size#readme",
+  "dependencies": {
+    "chrono-node": "^1.3.1",
+    "colors": "^1.1.2",
+    "command-line-args": "^4.0.2",
+    "command-line-usage": "^4.0.0",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1",
+    "q": "^1.4.1",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.0"
+  }
+}
