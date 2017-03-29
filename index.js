@@ -57,11 +57,11 @@ getProjects(authToken).then((projects) => {
     if (card.githubMetadata.state !== 'closed') return false
     const assignees = card.githubMetadata.assignees.map((assignee) => assignee.login)
     if (username && assignees.indexOf(username) === -1) return false
-    const createdAt = moment(card.githubMetadata.created_at)
-    if (createdAt.isBefore(startDate)) return false
-    if (createdAt.isAfter(endDate)) return false
+    const closedAt = moment(card.githubMetadata.closed_at)
+    if (closedAt.isBefore(startDate)) return false
+    if (closedAt.isAfter(endDate)) return false
     return true
   })
-  const sum = _.sum(_.map(validCards, (card) => card.size))
+  const sum = _.sum(_.map(validCards, (card) => card.size)) || 0
   console.log(`Total Size: ${sum} across ${validCards.length} cards`.green)
 })
