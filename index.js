@@ -4,7 +4,7 @@ const request = require('request')
 const optionDefinitions = require('./options')
 const chrono = require('chrono-node')
 const moment = require('moment')
-const { getProjects, getCardsForProject } = require('./waffle')
+const { getProjects, getCardsForProject, filterCards, outputMessage } = require('./waffle')
 const q = require('q')
 const _ = require('lodash')
 require('colors')
@@ -42,7 +42,7 @@ if (options['end-date']) {
 
 // Prepare other options.
 const authToken = options.token
-const username = options.username
+const usernames = options.username
 
 // Actually run the script.
 console.log('Fetching projects...'.yellow)
@@ -53,15 +53,15 @@ getProjects(authToken).then((projects) => {
   }))
 }).then((projectCards) => {
   const allCards = _.flatten(projectCards)
-  const validCards = allCards.filter((card) => {
-    if (card.githubMetadata.state !== 'closed') return false
-    const assignees = card.githubMetadata.assignees.map((assignee) => assignee.login)
-    if (username && assignees.indexOf(username) === -1) return false
-    const closedAt = moment(card.githubMetadata.closed_at)
-    if (closedAt.isBefore(startDate)) return false
-    if (closedAt.isAfter(endDate)) return false
-    return true
-  })
-  const sum = _.sum(_.map(validCards, (card) => card.size)) || 0
-  console.log(`Total Size: ${sum} across ${validCards.length} cards`.green)
+  if (usernames && usernames.length > 0) {
+    usernames.forEach((username) => {
+      const validCards = filterCards(allCards, startDate, endDate, username)
+      console.log(`${username}: ${outputMessage(validCards)}`)
+    })
+    const validCards = filterCards(allCards, startDate, endDate)
+    console.log(`Total: ${outputMessage(validCards)}`)
+  } else {
+    const validCards = filterCards(allCards, startDate, endDate)
+    console.log(outputMessage(validCards))
+  }
 })
