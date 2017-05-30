@@ -43,10 +43,11 @@ if (options['end-date']) {
 // Prepare other options.
 const authToken = options.token
 const usernames = options.username
+const projectsFilter = options.projects || []
 
 // Actually run the script.
 console.log('Fetching projects...'.yellow)
-getProjects(authToken).then((projects) => {
+getProjects(authToken, projectsFilter).then((projects) => {
   return q.all(projects.map((project) => {
     console.log(`Fetching cards for project '${project.name}'...`.yellow)
     return getCardsForProject(authToken, project._id)

@@ -21,8 +21,15 @@ const makeRequest = (method, authorizationToken, endpoint, data = {}) => {
   return request(options)
 }
 
-const getProjects = (authorizationToken) => {
-  return makeRequest('GET', authorizationToken, '/user/projects')
+const getProjects = (authorizationToken, projectsFilter = []) => {
+  return makeRequest('GET', authorizationToken, '/user/projects').then((projects) => {
+    return projects.filter((project) => {
+      if (projectsFilter && projectsFilter.length > 0 && projectsFilter.indexOf(project.name) === -1) {
+        return false
+      }
+      return true
+    })
+  })
 }
 
 const getCardsForProject = (authorizationToken, projectId) => {
